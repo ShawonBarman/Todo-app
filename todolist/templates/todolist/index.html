@@ -1,0 +1,118 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>ToDo App</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+
+		<!-- Bootstrap CSS -->
+		<!--<link rel="stylesheet" href="./bs/css/flatly.min.css" />
+		<link rel="stylesheet" href="./styles.css" />-->
+		<link rel="stylesheet" href="{% static 'todolist/bs/css/flatly.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'todolist/styles.css' %}" />
+		<style>
+			body {
+				background: rgb(67, 125, 163);
+				font-family: 'Oswald', 'Futura', sans-serif;
+			}
+			#wrapper {
+				margin-top: 10% !important;
+			}
+			#content {
+				background: rgb(206, 212, 163);
+				padding: 2.885rem;
+			}
+			#content > h1 {
+				font-size: 3.8rem;
+				font-weight: bold;
+				text-align: center;
+				padding-top: 0;
+			}
+			hr{
+				width: 66%;
+				border: 3px solid rgb(14, 233, 65);
+				margin-top:0;
+				margin-bottom: 3rem;
+			}
+			.t10 {
+				margin-top: 1.8rem;
+			}
+			.t20 {
+				margin-top: 2.8rem;
+			}
+			.todo-completed {
+				text-decoration: line-through;
+				background: rgba(149, 165, 166, .3);
+			}
+			footer {
+				margin-top: 20px;
+				color: white;
+				font-size: 1.7rem;
+
+			}
+		</style>
+
+	</head>
+	<body>
+		<div class="container-fluid" id="wrapper">
+			<div class="row">
+				<div class="col-lg-4 col-lg-offset-4" id="content">
+					<h1>Things to do</h1>
+					<hr />
+					<form action="{% url 'add' %}" method="POST" role="form">
+						{% csrf_token %}
+						<div class="form-group">
+							<div class="input-group">
+							  {{ form.text }}
+							  <span class="input-group-btn">
+								  <button type="submit" class="btn btn-success" id="add-btn">ADD</button>
+							  </span>
+							</div>
+						</div>
+					</form>
+
+					<div class="row t10">
+						<div class="col-lg-12">
+							<div class="btn-toolbar">
+								<div class="btn-group">
+									<a href="{% url 'deleteCompleted' %}"><button type="button" class="btn btn-warning">
+										<i class="glyphicon glyphicon-trash"></i> DELETE COMPLETED
+									</button></a>
+								</div>
+								<div class="btn-group">
+									<a href="{% url 'deleteAll' %}">
+										<button type="button" class="btn btn-danger">
+											<i class="glyphicon glyphicon-trash"></i> DELETE ALL
+										</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<ul class="list-group t20">
+						{% for todolist in todo_items %}
+							{% if todolist.complete %}
+								<li class="list-group-item todo-completed">{{todolist.text}}</li>
+							{% else %}
+								<a href="{% url 'completed' todolist.id %}"><li class="list-group-item">{{todolist.text}}</li></a>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+
+			<footer>
+				<div class="row pad">
+					<div class="col-lg-12 text-center">
+						Copyright &copy; ShawonBarman 2018
+					</div>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
